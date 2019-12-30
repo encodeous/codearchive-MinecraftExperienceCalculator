@@ -8,4 +8,4 @@ This calculator automatically converts between Minecraft Experience Levels, and 
 
 ![](https://i.imgur.com/E3rVkzb.png)
 
-Encodeous 2019, Archived Code from 2018
+Archived Code from 2018
