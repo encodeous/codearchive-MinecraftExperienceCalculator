@@ -7,78 +7,57 @@ using System.Text;
 
 namespace ExpCalc
 {
-    class CalculateEXP
+    class CalculateExp
     {
-        public static BigInteger getExpAtLevel(BigInteger level)
+        public static BigInteger LinearFunctionSum(BigInteger a, BigInteger b, BigInteger m, BigInteger n)
         {
-            if (level <= 15)
-            {
-                return (2 * level) + 7;
-            }
-            if ((level >= 16) && (level <= 30))
-            {
-                return (5 * level) - 38;
-            }
-            return (9 * level) - 158;
+            // Sum of a linear function in o(1) time
+            // https://math.stackexchange.com/questions/296476/formula-for-calculating-the-sum-of-a-series-of-function-results-over-a-specific#:~:text=The%20sum%20of%20ax,cx%2C%20and%20so%20on.
+            return a * (((n + m) * (n - m + 1)) / 2) + b * (n - m + 1);
         }
-
-        public static BigInteger getExpToLevel(BigInteger level)
+        public static BigInteger GetExperienceFromLevel(BigInteger level)
         {
-            BigInteger currentLevel = 0;
-            BigInteger exp = 0;
-
-            while (currentLevel < level)
+            if (level == 0) return 0;
+            level--;
+            BigInteger sum = 0;
+            if (level > 30)
             {
-                exp = exp + getExpAtLevel(currentLevel);
-                currentLevel++;
+                sum += LinearFunctionSum(9, -158, 31, level);
+                level = 30;
             }
-            if (exp < 0)
+            if (level > 15)
             {
-                exp = int.MaxValue;
+                sum += LinearFunctionSum(5, -38, 16, level);
+                level = 15;
             }
-            return exp;
+            if (level > 0)
+            {
+                sum += LinearFunctionSum(2, 7, 1, level);
+            }
+            return sum + 7;
         }
-        public static BigInteger getTotalLevels(BigInteger exp, out BigInteger remainder)
+        public static BigInteger GetLevelFromExperience(BigInteger exp)
         {
-            BigInteger timesLooped = 0;
-            BigInteger currentExp = exp;
-            BigInteger Level = 0;
-            BigInteger PrevExp = 0;
-            while (exp >= 0)
+            BigInteger low = 0;
+            BigInteger high = exp;
+            while (low < high)
             {
-                PrevExp = exp;
-                exp -= getExpAtLevel(Level);
-                Level++;
+                BigInteger mid = low + (high - low) / 2;
+                if (GetExperienceFromLevel(mid) >= exp)
+                {
+                    high = mid;
+                }
+                else
+                {
+                    low = mid + 1;
+                }
             }
-            remainder = getExpAtLevel(Level) - PrevExp;
-            return Level-1;
+            if (GetExperienceFromLevel(low) > exp) low--;
+            return low;
         }
-
-        public static BigInteger getTotalExperience(BigInteger level)
-        {
-            BigInteger exp = (getExpAtLevel(level) * (BigInteger)getExpPercentNeeded(level));
-            BigInteger currentLevel = level;
-            while (currentLevel > 0)
-            {
-                currentLevel--;
-                exp += getExpAtLevel(currentLevel);
-            }
-            if (exp < 0)
-            {
-                exp = int.MaxValue;
-            }
-            return exp;
-        }
-        
         public static BigInteger getExpUntilNextLevel(BigInteger exp, BigInteger NextLevel)
         {
-            return getTotalExperience(NextLevel) - exp;
-        }
-        
-        public static double getExpPercentNeeded(BigInteger level)
-        {
-            BigInteger temp = getExpAtLevel(level+1);
-            return (double)getExpAtLevel(level) / (double)temp;
+            return GetExperienceFromLevel(NextLevel) - exp;
         }
     }
 }

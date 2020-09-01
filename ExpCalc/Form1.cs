@@ -13,10 +13,6 @@ namespace ExpCalc
 {
     public partial class Form1 : Form
     {
-        int CurrentExp = 0;
-        int TargetExp = 0;
-        bool CurrentLevel = false;
-        bool TargetLevel = false;
         public Form1()
         {
             InitializeComponent();
@@ -24,9 +20,9 @@ namespace ExpCalc
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            int exp;
-            int.TryParse(textBox1.Text, out exp);
-            textBox3.Text = "" + CalculateEXP.getTotalExperience(exp);
+            BigInteger exp;
+            BigInteger.TryParse(textBox1.Text, out exp);
+            textBox3.Text = "" + CalculateExp.GetExperienceFromLevel(exp);
 
         }
 
@@ -34,11 +30,11 @@ namespace ExpCalc
         {
             BigInteger exp;
             BigInteger.TryParse(textBox2.Text, out exp);
-            BigInteger remainder = 0;
-            BigInteger expToLevel = CalculateEXP.getTotalLevels(exp, out remainder);
+            BigInteger expToLevel = CalculateExp.GetLevelFromExperience(exp);
+            BigInteger remainder = exp - CalculateExp.GetExperienceFromLevel(expToLevel);
             Debug.WriteLine(remainder);
             textBox4.Text = "" + expToLevel;
-            textBox5.Text = "" + CalculateEXP.getExpUntilNextLevel(exp, expToLevel+1);
+            textBox5.Text = "" + CalculateExp.getExpUntilNextLevel(exp, expToLevel+1);
         }
 
 
