@@ -1,4 +1,4 @@
-Minecraft Experience Calculator
+# Minecraft Experience Calculator
 
 This calculator automatically converts between Minecraft Experience Levels, and Experience Points. Due to a weird calculation function in the game, converting between the two is difficult. 
 
